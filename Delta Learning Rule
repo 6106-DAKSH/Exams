@@ -1,0 +1,42 @@
+
+import numpy as np
+
+X = np.array([
+    [0, 0],
+    [0, 1],
+    [1, 0],
+    [1, 1]
+])
+
+T = np.array([0, 0, 0, 1])
+
+eta = 0.1
+
+weights = np.zeros(2)
+bias = 0.0
+
+epochs = 20
+
+for epoch in range(epochs):
+    total_error = 0
+
+    for x, t in zip(X, T):
+        y = np.dot(weights, x) + bias
+
+        error = t - y
+
+        weights = weights + eta * error * x
+        bias = bias + eta * error
+
+        total_error += error ** 2
+
+    print(f"Epoch {epoch + 1}: MSE = {total_error / len(X):.4f}")
+
+print("\nFinal Weights:", weights)
+print("Final Bias:", bias)
+
+print("\nPredictions:")
+
+for x in X:
+    y = np.dot(weights, x) + bias
+    print(x, "->", round(y, 3))
