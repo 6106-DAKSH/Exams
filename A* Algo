@@ -1,0 +1,71 @@
+def astar(start, goal):
+    open_set = {start}
+    closed_set = set()
+    g = {start: 0}
+    parents = {start: None}
+
+    while open_set:
+        current = min(
+            open_set,
+            key=lambda x: g[x] + heuristic(x)
+        )
+
+        if current == goal:
+            path = []
+            node = current
+
+            while node is not None:
+                path.append(node)
+                node = parents[node]
+
+            path.reverse()
+
+            print("Shortest path:", path)
+            print("Total cost:", g[goal])
+            return
+
+        open_set.remove(current)
+        closed_set.add(current)
+
+        neighbors = graph.get(current, [])
+
+        for neighbor, cost in neighbors:
+            if neighbor in closed_set:
+                continue
+
+            new_cost = g[current] + cost
+
+            if (neighbor not in open_set or
+                    new_cost < g.get(neighbor, float('inf'))):
+                g[neighbor] = new_cost
+                parents[neighbor] = current
+                open_set.add(neighbor)
+
+    print("No path found.")
+
+
+# Heuristic values (estimated cost to goal)
+def heuristic(node):
+    h = {
+        'A': 11,
+        'B': 6,
+        'C': 99,
+        'D': 1,
+        'E': 7,
+        'G': 0
+    }
+    return h.get(node, float('inf'))
+
+
+# Graph definition
+graph = {
+    'A': [('B', 2), ('E', 3)],
+    'B': [('C', 1), ('G', 9)],
+    'C': [],
+    'E': [('D', 6)],
+    'D': [('G', 1)],
+    'G': []
+}
+
+# Run the search
+astar('A', 'G')
